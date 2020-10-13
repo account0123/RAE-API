@@ -31,12 +31,12 @@ class HttpInterface {
 			if(res.statusCode != 200) reject('Llamada no disponible en este momento.');
     		// called when a data chunk is received.
     		res.on('data', (chunk) => {
-				let data = chunk.toString().replace('\n','');
-				data = data.replace('\t', '');
+				let data = chunk.toString().replace(/\n/g,'');
+				data = data.replace(/\t/g, '');
 				if(data.indexOf('json(') != -1){
-					data = data.substring(5, -1);
+					data = data.slice(5, -1);
 				}if (data.indexOf('jsonp123(') != -1){
-					data = data.substring(9,-1)
+					data = data.slice(9,-1)
 				}
 				if(Array.isArray(data)) data = JSON.stringify(data);
 				body += data;
@@ -55,7 +55,7 @@ class HttpInterface {
 				}
 				const response = res;
 				Object.defineProperty(response, 'body', { value: JSON.parse(body), writable: false});
-				resolve(JSON.parse(response));
+				resolve(response);
 			});
 			
 			}).on("error", (err) => {

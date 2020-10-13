@@ -11,13 +11,14 @@ class Utils {
 		string = ' ' + string;
 		let ini;
 		ini = string.indexOf(start);
-		if (ini == 0) {
+		if (ini < 1) {
 			return '';
 		}
 		ini += start.length;
 		const len = string.indexOf(end, ini) - ini;
-	
-		return string.substr(ini, len);
+		let result = string.substr(ini, len);
+		if(result === '') result = string.slice(ini);
+		return result;
 	}
 	static get_definitions(html){
 		let text;
@@ -37,6 +38,7 @@ class Utils {
 		}
 		
 		const defs = [first];
+		// Puedes encontrar una palabra con más de 20 definiciones?
 		for (let i = 2; i < 20; i++) {
 			const definition = Utils.find_between(text, i + '.', '.' + ( i + 1 ));
 			if(definition != '') defs.push(definition);
