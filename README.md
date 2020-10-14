@@ -3,9 +3,7 @@ RAE API i modified from https://github.com/mgp25/RAE-API to nodejs
 
 See examples folder for more information.
 
-Note: API finished!!!
-
-I'm sorry if you were running buggy versions. https://github.com/account0123/RAE-API/issues is open anyways.
+Update: API finished!!!
 
 ## Installation
 
@@ -42,7 +40,8 @@ const search = await rae.searchWord('hola');
 const wordId = search.getRes()[0].getId(); // gets 'hola' word id
 
 const result = await rae.fetchWord(wordId); // fetches the word as object
-const definitions = result.getDefinitions(); // gets all 'hola' definitions as string[]
+const definitions = result.getDefinitions(); // gets all 'hola' definitions as Defintion[]
+const first = defintions[0].getDefinition(); // gets the first 'hola' definition as string
 ```
 
 ## Contributing
