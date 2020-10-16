@@ -19,7 +19,7 @@ class KeyQueryResponse extends Response{
 	 * 
 	 * @returns {boolean} Si o no hay palabras relacionadas con la búsqueda
 	 */
-	isKeys(){ return this.#keys ? true : false; }
+	areKeys(){ return this.#keys ? true : false; }
 
 	/**
 	 * 
