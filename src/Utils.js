@@ -21,33 +21,18 @@ class Utils {
 		return result;
 	}
 	static get_definitions(html){
-		let text;
-		text = html.replace(/<[^>]+>/g, '');
-		text = text.replace('U.', '');
-		text = text.replace('Era u.', '');
-		text = text.replace('p. us.', '');
-		text = text.replace('desus.', '');
-		text = text.replace('m.', '');
-		text = text.replace('f.', '');
-		text = text.replace('t. repetida', '');
-		text = text.replace(' interj.', 'interj.');
-		let first
-		first = Utils.find_between(text, '1.', '.2');
-		if (first == '') {
-			first = Utils.find_between(text, '1.', '.');
-		}
-		
-		const defs = [first];
-		// Puedes encontrar una palabra con más de 20 definiciones?
-		for (let i = 2; i < 20; i++) {
-			const definition = Utils.find_between(text, i + '.', '.' + ( i + 1 ));
-			if(definition != '') defs.push(definition);
-			else break;
-		}
-		let definitions = [];
-		for(const def of defs){
-			const data = def.split('.');
-			definitions.push({'type': data[0], 'definition': (data[1] || '').trim()});
+    let definitions = [];
+    let paragraphs = [...html.matchAll(/<p class="j"[^>]*>(.+?)(?=<\/p>)/g)];
+    for (const paragraph of paragraphs) {
+      const types = [...paragraph[1].matchAll(/<abbr[^>]*>(.+?)(?=<\/abbr>)/g)];
+      const definition = paragraph[1]
+        .replace(/<abbr[^>]+>.+?<\/abbr>/g, '')
+        .replace(/<span[^>]+>.+?<\/span>/g, '')
+        .replace(/<[^>]+>/g, '');
+			definitions.push({
+        type: types.map(function(type) { return(type[1]); }).join(' '),
+        definition
+      });
 		}
 		const body = {'definitions': definitions};
 		return JSON.stringify(body);
