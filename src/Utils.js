@@ -47,7 +47,7 @@ class Utils {
 		let definitions = [];
 		for(const def of defs){
 			const data = def.split('.');
-			definitions.push({'type': data[0], 'definition': data[1].trim()});
+			definitions.push({'type': data[0], 'definition': (data[1] || '').trim()});
 		}
 		const body = {'definitions': definitions};
 		return JSON.stringify(body);
