@@ -44,6 +44,8 @@ class HttpInterface {
 
     		// called when the complete response is received.
     		res.on('end', () => {
+				// deletes <sup>1<\/sup>, which was altering a near condition
+				body = body.replace(/<sup>\d*<\\\/sup>/g, '');
 				if (body != body.replace(/<\/?[^>]+(>|$)/g, '')){
 					body = Utils.get_definitions(body);
 				}

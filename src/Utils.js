@@ -21,18 +21,34 @@ class Utils {
 		return result;
 	}
 	static get_definitions(html){
-    let definitions = [];
-    let paragraphs = [...html.matchAll(/<p class="j"[^>]*>(.+?)(?=<\/p>)/g)];
-    for (const paragraph of paragraphs) {
-      const types = [...paragraph[1].matchAll(/<abbr[^>]*>(.+?)(?=<\/abbr>)/g)];
-      const definition = paragraph[1]
-        .replace(/<abbr[^>]+>.+?<\/abbr>/g, '')
-        .replace(/<span[^>]+>.+?<\/span>/g, '')
-        .replace(/<[^>]+>/g, '');
+    	let definitions = [];
+    	let paragraphs = [...html.matchAll(/<p class="j"[^>]*>(.+?)(?=<\/p>)/g)];
+    	for(const paragraph of paragraphs){
+			const types = [...paragraph[1].matchAll(/<abbr[^>]*>(.+?)(?=<\/abbr>)/g)];
+    		const definition = paragraph[1]
+    			.replace(/<abbr[^>]+>.+?<\/abbr>/g, '')
+    			.replace(/<span[^>]+>.+?<\/span>/g, '')
+    			.replace(/<[^>]+>/g, '')
+				.replace(/&#xE1;/g, 'á')
+				.replace(/&#xE9;/g, 'é')
+				.replace(/&#xED;/g, 'í')
+				.replace(/&#xF3;/g, 'ó')
+				.replace(/&#xFA;/g, 'ú')
+				.replace(/&#x2016/g, '||')
+				.replace(/&#xF1;/g, 'ñ');
+			
 			definitions.push({
-        type: types.map(function(type) { return(type[1]); }).join(' '),
-        definition
-      });
+    	    	type: types.map(
+					(type)=>type[1]
+						.replace(/&#xE1;/g, 'á')
+						.replace(/&#xE9;/g, 'é')
+						.replace(/&#xED;/g, 'í')
+						.replace(/&#xF3;/g, 'ó')
+						.replace(/&#xFA;/g, 'ú')
+						.replace(/&#xF1;/g, 'ñ')
+					).join(' '),
+    	    	definition
+    	  	});
 		}
 		const body = {'definitions': definitions};
 		return JSON.stringify(body);
