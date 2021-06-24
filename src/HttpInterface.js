@@ -2,6 +2,7 @@ const { BASE_URL, AUTH } = require('./Constants');
 const https = require('https');
 const {IncomingMessage} = require('http');
 const Utils = require("./Utils");
+const RAE = require('./RAE');
 class HttpInterface {
 	debug;
 	truncatedDebug;
@@ -46,7 +47,13 @@ class HttpInterface {
     		res.on('end', () => {
 				// deletes <sup>1<\/sup>, which was altering a near condition
 				body = body.replace(/<sup>\d*<\\\/sup>/g, '');
-				if (body != body.replace(/<\/?[^>]+(>|$)/g, '')){
+				// fetch word indexed by "Véase" (see also) 
+				if(body.match(/abbr title="V&#xE9;ase"/)){
+					const i = body.search(/\/\?id=(\w+)/);
+					const query = body.substr(i+2, 10);
+					this.sendRequest('fetch?' + query).then((res)=>resolve(res));
+					return;
+				}else if(body != body.replace(/<\/?[^>]+(>|$)/g, '')){
 					body = Utils.get_definitions(body);
 				}
 				if(this.debug){
