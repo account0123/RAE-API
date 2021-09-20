@@ -41,7 +41,7 @@ const wordId = search.getRes()[0].getId(); // gets 'hola' word id
 
 const result = await rae.fetchWord(wordId); // fetches the word as object
 const definitions = result.getDefinitions(); // gets all 'hola' definitions as Defintion[]
-const first = defintions[0].getDefinition(); // gets the first 'hola' definition as string
+const first = definitions[0].getDefinition(); // gets the first 'hola' definition as string
 ```
 
 ## Contributing
