@@ -3,6 +3,9 @@ const https = require('https');
 const {IncomingMessage} = require('http');
 const Utils = require("./Utils");
 const RAE = require('./RAE');
+
+const httpsAgent = new https.Agent({ ALPNProtocols: ['http/1.1'], minVersion: 'TLSv1.3', maxVersion: 'TLSv1.3' });
+
 class HttpInterface {
 	debug;
 	truncatedDebug;
@@ -26,7 +29,7 @@ class HttpInterface {
 				'Authorization': AUTH
 			};
 		return new Promise((resolve, reject)=>{
-			https.get(url, {headers: headers},  (res) => {
+			https.get(url, {headers: headers, agent: httpsAgent},  (res) => {
     		let body = '';
 
 			if(res.statusCode != 200) reject('Llamada no disponible en este momento.');
