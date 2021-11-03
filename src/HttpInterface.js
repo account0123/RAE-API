@@ -72,7 +72,7 @@ class HttpInterface {
 			
 			}).on("error", (err) => {
 				console.log("Error: ", err.message);
-				reject(error);
+				reject(err);
 			});
 		});
 	}

@@ -1,6 +1,6 @@
 {
   "name": "rae-api",
-  "version": "1.2.6",
+  "version": "1.2.4a",
   "description": "This API allows you to search a word and their definitions on the Real Academia Española",
   "main": "src/index.js",
   "scripts": {
