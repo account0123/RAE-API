@@ -14,7 +14,7 @@ class Res{
 	#id;
 	constructor(res){
 		if(res.grp) this.#grp = res.grp;
-		if(res.header) this.#header = res.header;
+		if(res.header) this.#header = res.header.replace(/<\/?i>/g,'');
 		if(res.id) this.#id = res.id;
 	}
 

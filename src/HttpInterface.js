@@ -51,17 +51,22 @@ class HttpInterface {
 				// deletes <sup>1<\/sup>, which was altering a near condition
 				body = body.replace(/<sup>\d*<\\\/sup>/g, '');
 				// fetch word indexed by "Véase" (see also) 
-				if(body.match(/abbr title="V&#xE9;ase"/)){
+				if(body.match(/^<abbr title="V&#xE9;ase"/)){
 					const i = body.search(/\/\?id=(\w+)/);
 					const query = body.substr(i+2, 10);
 					this.sendRequest('fetch?' + query).then((res)=>resolve(res));
 					return;
-				}else if(body != body.replace(/<\/?[^>]+(>|$)/g, '')){
+				}else if(body != body.replace(/<\/?[^>]+(>|$)/g, '') && !body.startsWith('{')){
 					body = Utils.get_definitions(body);
 				}
 				if(this.debug){
 					console.log('fetch: GET ' + BASE_URL + endpoint);
 					console.log('headers: ' + JSON.stringify(res.headers));
+					console.log('body: ' + body);
+					console.log('Status Code: ' + res.statusCode);
+				}
+				if(!this.debug && this.truncatedDebug){
+					console.log('fetch: GET ' + BASE_URL + endpoint);
 					console.log('body: ' + body);
 					console.log('Status Code: ' + res.statusCode);
 				}
