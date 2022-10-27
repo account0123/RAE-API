@@ -22,7 +22,7 @@ class HttpInterface {
 	 */
 	sendRequest(endpoint){
 		const url = BASE_URL + endpoint;
-		const headers = 
+		const headers =
 			{
 				'User-Agent':'Diccionario/2 CFNetwork/808.2.16 Darwin/16.3.0',
 				'Content-Type':'application/x-www-form-urlencoded',
@@ -50,11 +50,23 @@ class HttpInterface {
     		res.on('end', () => {
 				// deletes <sup>1<\/sup>, which was altering a near condition
 				body = body.replace(/<sup>\d*<\\\/sup>/g, '');
-				// fetch word indexed by "Véase" (see also) 
-				if(body.match(/^<abbr title="V&#xE9;ase"/)){
-					const i = body.search(/\/\?id=(\w+)/);
-					const query = body.substr(i+2, 10);
-					this.sendRequest('fetch?' + query).then((res)=>resolve(res));
+				// fetch word indexed by "Véase" (see also)
+				if(body.match(/^<article id=\".*\">/)){
+					const i = body.match(/id="(\w+)"/)[1];
+					const h = body.match(/<header [^>]*>([^<]+)/)[1]
+						.replace(/&#xE1;/g, 'á')
+						.replace(/&#xE9;/g, 'é')
+						.replace(/&#xED;/g, 'í')
+						.replace(/&#xF3;/g, 'ó')
+						.replace(/&#xFA;/g, 'ú')
+						.replace(/&#xF1;/g, 'ñ');
+					body = JSON.parse(Utils.get_definitions(body));
+					body["id"] = i;
+					body["header"] = h;
+					body = JSON.stringify(body);
+				}else if(body.match(/^<abbr title="V&#xE9;ase"/)){
+					const i = body.match(/id="(\w+)"/)[1];
+					this.sendRequest('fetch?id=' + i).then((res)=>resolve(res));
 					return;
 				}else if(body != body.replace(/<\/?[^>]+(>|$)/g, '') && !body.startsWith('{')){
 					body = Utils.get_definitions(body);
@@ -74,7 +86,7 @@ class HttpInterface {
 				Object.defineProperty(response, 'body', { value: JSON.parse(body), writable: false});
 				resolve(response);
 			});
-			
+
 			}).on("error", (err) => {
 				console.log("Error: ", err.message);
 				reject(err);
