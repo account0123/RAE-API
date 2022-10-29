@@ -1,4 +1,5 @@
 const Response = require('../Response');
+const Definition = require('./Model/Definition');
 const {IncomingMessage} = require('http');
 
 /**
@@ -10,7 +11,7 @@ const {IncomingMessage} = require('http');
  * @method bool isId()
  */
 class RandomWordResponse extends Response{
-	#definitions;
+	#definitions = [];
 	#header;
 	#id;
 	/**
@@ -22,7 +23,11 @@ class RandomWordResponse extends Response{
 		const body = response.body;
 		if (body.header) this.#header = body.header;
 		if (body.id) this.#id = body.id;
-		if (body.definitions) this.#definitions = body.definitions;
+		if (body.definitions){
+			for (const def of body.definitions){
+				this.#definitions.push(new Definition(def));
+			}
+		}
 	}
 
 	/**
@@ -36,9 +41,9 @@ class RandomWordResponse extends Response{
 	isId(){ return this.#id ? true : false; }
 
 	/**
-	 * @returns {boolean} Sí o no la palabra tiene definición.
+	 * @returns {boolean} Sí o no la palabra tiene definiciones disponibles.
 	 */
-	isDefinition(){ return this.#definitions ? true : false; }
+	areDefinitions(){ return this.#definitions ? true : false; }
 
 	/**
 	 * @returns {string} El encabezado de la palabra.
