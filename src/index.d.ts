@@ -31,6 +31,15 @@ declare module "rae-api" {
 		getHeader(): boolean;
 		getId(): string;
 	}
+	export class RandomWordResponse extends Response {
+		constructor(response: IncomingMessage & {body: {header: string, id: string, definitions: {type?: string, definition?: string}[]}});
+		isHeader(): boolean;
+		isId(): boolean;
+		areDefinitions(): boolean;
+		getHeader(): string;
+		getId(): string;
+		getDefinitions(): Definition[];
+	}
 	export class KeyQueryResponse extends Response {
 		constructor(response: IncomingMessage & {body: string[]});
 		areKeys(): boolean;
