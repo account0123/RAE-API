@@ -1,6 +1,7 @@
 const HttpInterface = require('./HttpInterface');
 const FetchWordResponse = require("./Response/FetchWordResponse");
 const KeyQueryResponse = require("./Response/KeyQueryResponse");
+const RandomWordResponse = require('./Response/RandomWordResponse');
 const SearchWordResponse = require("./Response/SearchWordResponse");
 const WordOfTheDayResponse = require('./Response/WordOfTheDayResponse');
 class RAE{
@@ -29,6 +30,13 @@ class RAE{
 		const esc = encodeURIComponent;
 		const querystring = Object.keys(data).map(k => esc(k) + '=' + esc(data[k])).join('&');
         return new WordOfTheDayResponse(await this.http.sendRequest('wotd?' + querystring));
+    }
+
+    /**
+     * Obtiene una palabra aleatoria del API de la RAE.
+     */
+    async getRandomWord(){
+      return new RandomWordResponse(await this.http.sendRequest('random'));
     }
 
     /**
