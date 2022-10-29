@@ -1,8 +1,8 @@
-const { RAE } = require( "..src/RAE" );
+const RAE = require( "../src/RAE" );
 const rae = new RAE();
 
 (async function(){
-  const random = await new RAE().getRandomWord();
+  const random = await rae.getRandomWord();
   console.log(`Palabra aleatoria: ${ random.getHeader() }.`);
   console.log(`Id de la palabra: ${ random.getId() }`);
   console.log(`Definiciones:\n`);
