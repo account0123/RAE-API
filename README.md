@@ -47,6 +47,13 @@ const definitions = result.getDefinitions(); // gets all 'hola' definitions as D
 const first = definitions[0].getDefinition(); // gets the first 'hola' definition as string
 ```
 
+Getting the definitions from a random word
+```js
+const random = await new RAE().getRandomWord(); //fetches a random word
+const definitions = random.getDefinitions(); // gets all definitions of random word as Definition[]
+const first = definitions[0].getDefinition(); // gets the first definition of random word as string
+```
+
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
