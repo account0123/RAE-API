@@ -7,6 +7,6 @@ const rae = new RAE();
   console.log(`Id de la palabra: ${ random.getId() }`);
   console.log(`Definiciones:\n`);
   random.getDefinitions().forEach(d => {
-    console.log(`\t- (${ d.type }) ${ d.definition }`);
+    console.log(`\t- (${ d.getType() }) ${ d.getDefinition() }`);
   });
 })();
