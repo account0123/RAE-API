@@ -3,8 +3,8 @@ const RAE = require('../src/RAE');
 const debug = false;
 const rae = new RAE(debug);
 
-async function start(){
-	const search = await rae.searchWord('hola');
+async function definir(palabra){
+	const search = await rae.searchWord(palabra);
 	const first_result = search.getRes()[0];
 
 	const wordId = first_result.getId();
@@ -20,4 +20,4 @@ async function start(){
 	}
 }
 
-start();
+definir('hola');

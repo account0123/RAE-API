@@ -32,7 +32,7 @@ class HttpInterface {
 			https.get(url, {headers: headers, agent: httpsAgent},  (res) => {
     		let body = '';
 
-			if(res.statusCode != 200) reject('Llamada no disponible en este momento.');
+			if(res.statusCode != 200) reject(`Error ${res.statusCode}.\nLa solicitud a ${url} fue respondida de forma inesperada.`);
     		// called when a data chunk is received.
     		res.on('data', (chunk) => {
 				let data = chunk.toString().replace(/\n/g,'');
@@ -48,12 +48,16 @@ class HttpInterface {
 
     		// called when the complete response is received.
     		res.on('end', () => {
+				if(body.length == 0){
+					reject('No hubo respuesta del servidor (id incorrecta?)');
+					return;
+				}
 				// deletes <sup>1<\/sup>, which was altering a near condition
 				body = body.replace(/<sup>\d*<\\\/sup>/g, '');
 				// fetch word indexed by "Véase" (see also)
 				if(body.match(/^<article id=\".*\">/)){
 					const i = body.match(/id="(\w+)"/)[1];
-					const h = body.match(/<header [^>]*>([^<]+)/)[1]
+					const h = body.match(/<header .+>([^<]+)(<\/i>)?<\/h/)[1]
 						.replace(/&#xE1;/g, 'á')
 						.replace(/&#xE9;/g, 'é')
 						.replace(/&#xED;/g, 'í')
