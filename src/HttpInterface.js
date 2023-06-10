@@ -52,12 +52,12 @@ class HttpInterface {
 					reject('No hubo respuesta del servidor (id incorrecta?)');
 					return;
 				}
-				// deletes <sup>1<\/sup>, which was altering a near condition
-				body = body.replace(/<sup>\d*<\/sup>/g, '');
-				// fetch word indexed by "Véase" (see also)
+				// deletes <sup>1<\/sup> on search
+				body = body.replace(/<sup>\d+<\\\/sup>/g, '');
 				if(body.match(/^<article id=\".*\">/)){
 					const i = body.match(/id="(\w+)"/)[1];
-					const h = body.match(/<header .+>([^<]+)(<\/i>)?<\/h/)[1]
+					//deletes <sup>1</sup> on definitions
+					const h = body.replace(/<sup>\d+<\/sup>/, '').match(/<header .+>([^<]+)(<\/i>)?<\/h/)[1]
 						.replace(/&#xE1;/g, 'á')
 						.replace(/&#xE9;/g, 'é')
 						.replace(/&#xED;/g, 'í')
@@ -68,6 +68,7 @@ class HttpInterface {
 					body["id"] = i;
 					body["header"] = h;
 					body = JSON.stringify(body);
+				// fetch word indexed by "Véase" (see also)
 				}else if(body.match(/^<abbr title="V&#xE9;ase"/)){
 					const i = body.match(/id="(\w+)"/)[1];
 					this.sendRequest('fetch?id=' + i).then((res)=>resolve(res));
