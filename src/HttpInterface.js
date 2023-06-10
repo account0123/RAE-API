@@ -53,7 +53,7 @@ class HttpInterface {
 					return;
 				}
 				// deletes <sup>1<\/sup>, which was altering a near condition
-				body = body.replace(/<sup>\d*<\\\/sup>/g, '');
+				body = body.replace(/<sup>\d*<\/sup>/g, '');
 				// fetch word indexed by "Véase" (see also)
 				if(body.match(/^<article id=\".*\">/)){
 					const i = body.match(/id="(\w+)"/)[1];
