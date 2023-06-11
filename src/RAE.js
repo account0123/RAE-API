@@ -4,6 +4,7 @@ const KeyQueryResponse = require("./Response/KeyQueryResponse");
 const RandomWordResponse = require('./Response/RandomWordResponse');
 const SearchWordResponse = require("./Response/SearchWordResponse");
 const WordOfTheDayResponse = require('./Response/WordOfTheDayResponse');
+const AnagramResponse = require('./Response/AnagramResponse');
 const enc = encodeURIComponent;
 class RAE{
     /**
@@ -70,6 +71,10 @@ class RAE{
      */
     async fetchWord(id){
         return new FetchWordResponse(await this.http.sendRequest('fetch?id=' + enc(id)))
+    }
+
+    async searchAnagram(word){
+        return new AnagramResponse(await this.http.sendRequest('anagram?w=' + enc(word)))
     }
 }
 

@@ -69,6 +69,11 @@ declare module "rae-api" {
 		/** @deprecated use `results`*/
 		getRes(): Result[];
 	}
+	export class AnagramResponse extends Response {
+		readonly approx: number
+		readonly results: AnagramResult[]
+		constructor(response: {header: IncomingMessage, body: {approx: number, res: {word: string, header: string, id: string}}})
+	}
 
 	export class Result {
 		readonly group: number
@@ -101,5 +106,11 @@ declare module "rae-api" {
 		getType(): string;
 		/** @deprecated use `content` */
 		getDefinition(): string;
+	}
+	export class AnagramResult {
+		readonly header: string
+		readonly id: string
+		readonly word: string
+		constructor(res: {header: string, id: string, word: string})
 	}
 }
