@@ -5,19 +5,19 @@ const rae = new RAE(debug);
 
 async function definir(palabra){
 	const search = await rae.searchWord(palabra);
-	const first_result = search.getRes()[0];
+	const first_result = search.results[0];
 
-	const wordId = first_result.getId();
+	const wordId = first_result.id;
 	const result = await rae.fetchWord(wordId);
-	const definitions = result.getDefinitions();
+	const definitions = result.definitions;
 
 	let i = 1;
-	console.log(`Definición de ${first_result.getHeader()}`);
+	console.log(`Definición de ${first_result.header}`);
 	for (const definition of definitions) {
-		console.log(`${i}. Tipo: ${definition.getType()}\n`);
-		console.log(`    Definición: ${definition.getDefinition()}\n\n`);
+		console.log(`${i}. Tipo: ${definition.type}\n`);
+		console.log(`    Definición: ${definition.content}\n\n`);
 		i++;
 	}
 }
 
-definir('hola');
+definir('ajo');
