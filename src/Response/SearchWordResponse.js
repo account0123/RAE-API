@@ -1,37 +1,26 @@
 const Response = require('../Response');
-const Res = require('./Model/Res');
-const {IncomingMessage} = require('http');
+const Result = require('./Model/Result');
 
-/**
- * SearchWordResponse.
- *
- * @method int getApprox()
- * @method Res[] getRes()
- */
 class SearchWordResponse extends Response {
+	/** @type {number} */
 	#approx;
+	/** @type {Result[]} */
 	#res = [];
-	/**
-	 * @param {IncomingMessage} response 
-	 */
+	
 	constructor(response){
-		super(response);
+		super(response.header);
 		const body = response.body;
 		this.#approx = body.approx;
 		for (const res of body.res) {
-			this.#res.push(new Res(res));
+			this.#res.push(new Result(res));
 		}
 	}
-	/**
-	 * @returns {number}
-	 */
-	getApprox(){ return this.#approx; }
 
-	/**
-	 * @returns {Res[]} Resultados de la búsqueda.
-	 */
-	getRes(){ return this.#res; }
+	getApprox(){ return this.#approx }
+	getRes(){ return this.#res }
 
+	get approx(){return this.#approx}
+	get results(){return this.#res}
 }
 
 module.exports = SearchWordResponse;

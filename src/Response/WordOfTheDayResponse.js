@@ -1,47 +1,25 @@
 const Response = require('../Response');
-const {IncomingMessage} = require('http');
 
-/**
- * WordOfTheDayResponse.
- *
- * @method string getHeader()
- * @method string getId()
- * @method bool isHeader()
- * @method bool isId()
- */
 class WordOfTheDayResponse extends Response{
+	/** @type {string} */
 	#header;
+	/** @type {string} */
 	#id;
-	/**
-	 * 
-	 * @param {IncomingMessage} response 
-	 */
+
 	constructor(response){
-		super(response);
+		super(response.header);
 		const body = response.body;
-		if (body.header) this.#header = body.header;
-		if (body.id) this.#id = body.id; 
+		this.#header = body.header;
+		this.#id = body.id; 
 	}
 
-	/**
-	 * @returns {boolean} Sí o no hay la palabra tiene encabezado.
-	 */
-	isHeader(){ return this.#header ? true : false;}
+	isHeader(){ return !!this.#header }
+	isId(){ return !!this.#id }
+	getHeader(){ return this.#header }
+	getId(){ return this.#id }
 
-	/**
-	 * @returns {boolean} Sí o no la palabra tiene id.
-	 */
-	isId(){ return this.#id ? true : false; }
-
-	/**
-	 * @returns {string} El encabezado de la palabra.
-	 */
-	getHeader(){ return this.#header; }
-
-	/**
-	 * @returns {string} La id de la palabra.
-	 */
-	getId(){ return this.#id; }
+	get header(){return this.#header}
+	get id(){return this.#id}
 }
 
 module.exports = WordOfTheDayResponse;

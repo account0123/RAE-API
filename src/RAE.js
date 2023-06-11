@@ -4,6 +4,7 @@ const KeyQueryResponse = require("./Response/KeyQueryResponse");
 const RandomWordResponse = require('./Response/RandomWordResponse');
 const SearchWordResponse = require("./Response/SearchWordResponse");
 const WordOfTheDayResponse = require('./Response/WordOfTheDayResponse');
+const enc = encodeURIComponent;
 class RAE{
     /**
      * HTTP interface.
@@ -11,32 +12,31 @@ class RAE{
     http;
 
     /**
-     * Constructor.
-     *
-     * @param {boolean} debug          Show API queries and responses.
-     * @param {boolean} truncatedDebug Truncate long responses in debug.
+     * debugMode:
+     * 
+     * 0 - No debug
+     * 
+     * 1 - Show API queries and responses
+     * 
+     * 2 - Truncate long responses in debug
      */
-    constructor(debug = false, truncatedDebug = false){
+    constructor(debugMode = 0){
         this.http = new HttpInterface();
-        this.http.setDebug(debug);
-        this.http.setTruncatedDebug(truncatedDebug);
+        this.http.setDebugMode(debugMode);
     }
 
     /**
      * Obtiene la palabra del día.
      */
     async getWordOfTheDay(){
-        const data = { 'callback': 'json' };
-		const esc = encodeURIComponent;
-		const querystring = Object.keys(data).map(k => esc(k) + '=' + esc(data[k])).join('&');
-        return new WordOfTheDayResponse(await this.http.sendRequest('wotd?' + querystring));
+        return new WordOfTheDayResponse(await this.http.sendRequest('wotd?callback=json'))
     }
 
     /**
      * Obtiene una palabra aleatoria del API de la RAE.
      */
     async getRandomWord(){
-      return new RandomWordResponse(await this.http.sendRequest('random'));
+      return new RandomWordResponse(await this.http.sendRequest('random'))
     }
 
     /**
@@ -46,9 +46,8 @@ class RAE{
      */
     async keyQuery(query){
 		const data = {'q': query, 'callback': 'jsonp123'};
-		const esc = encodeURIComponent;
-		const querystring = Object.keys(data).map(k => esc(k) + '=' + esc(data[k])).join('&');
-        return new KeyQueryResponse(await this.http.sendRequest('keys?' + querystring));
+		const querystring = Object.keys(data).map(k => enc(k) + '=' + enc(data[k])).join('&');
+        return new KeyQueryResponse(await this.http.sendRequest('keys?' + querystring))
     }
 
     /**
@@ -57,10 +56,7 @@ class RAE{
      * @param {string} word Palabra a buscar.
      */
     async searchWord(word){
-		const data = {'w': word };
-		const esc = encodeURIComponent;
-		const querystring = Object.keys(data).map(k => esc(k) + '=' + esc(data[k])).join('&');
-        return new SearchWordResponse(await this.http.sendRequest('search?' + querystring));
+        return new SearchWordResponse(await this.http.sendRequest('search?w=' + enc(word)))
     }
 
     /**
@@ -73,10 +69,7 @@ class RAE{
      * @throws Error
      */
     async fetchWord(id){
-		const data = { 'id': id };
-		const esc = encodeURIComponent;
-		const querystring = Object.keys(data).map(k => esc(k) + '=' + esc(data[k])).join('&');
-        return new FetchWordResponse(await this.http.sendRequest('fetch?' + querystring));
+        return new FetchWordResponse(await this.http.sendRequest('fetch?id=' + enc(id)))
     }
 }
 

@@ -1,4 +1,3 @@
-import KeyQueryResponse from "./Response/KeyQueryResponse";
 import HttpInterface from "./HttpInterface";
 import {IncomingMessage} from 'http';
 declare module "rae-api" {
@@ -20,52 +19,87 @@ declare module "rae-api" {
 		isHttpResponse(): boolean;
 	}
 	export class Utils {
-		static formatBytes(bytes: number, precision: number): string;
-		static find_between(string: string, start: string, end: string): string;
 		static get_definitions(html: string): { definitions: [{type: string, definition: string}] };
 	}
 	export class WordOfTheDayResponse extends Response {
-		constructor(response: IncomingMessage & {body: {header: string, id: string}});
+		readonly header: string
+		readonly id: string
+		constructor(response: {header: IncomingMessage, body: {header: string, id: string}});
+		/** @deprecated use `if( header )`*/
 		isHeader(): boolean;
+		/** @deprecated use `if( id )`*/
 		isId(): string;
+		/** @deprecated use `header` */
 		getHeader(): boolean;
+		/** @deprecated use `id`*/
 		getId(): string;
 	}
 	export class RandomWordResponse extends Response {
-		constructor(response: IncomingMessage & {body: {header: string, id: string, definitions: {type?: string, definition?: string}[]}});
+		readonly header: string
+		readonly id: string
+		readonly definitions: Definition[]
+		constructor(response: {header: IncomingMessage, body: {header: string, id: string, definitions: {type: string, content: string}[]}});
+		/** @deprecated use `if( header )`*/
 		isHeader(): boolean;
+		/** @deprecated use `if( id )` */
 		isId(): boolean;
+		
 		areDefinitions(): boolean;
+		/** @deprecated use `header` */
 		getHeader(): string;
+		/** @deprecated use `id` */
 		getId(): string;
+		/** @deprecated use `definitions` */
 		getDefinitions(): Definition[];
 	}
 	export class KeyQueryResponse extends Response {
-		constructor(response: IncomingMessage & {body: string[]});
+		readonly keys: string[]
+		constructor(response: {header: IncomingMessage, body: string[]});
+
 		areKeys(): boolean;
+		/** @deprecated use `keys` */
 		getKeys(): string[];
 	}
 	export class SearchWordResponse extends Response {
-		constructor(response: IncomingMessage & {body: {grp: number, header: string, id: string}});
-		getApprox(): boolean;
-		getRes(): Res[];
+		readonly approx: number
+		readonly results: Result[]
+		constructor(response: {header: IncomingMessage, body: {approx: number, res: {grp: number, header: string, id: string}[]}});
+		/** @deprecated use `approx`*/
+		getApprox(): number;
+		/** @deprecated use `results`*/
+		getRes(): Result[];
 	}
-	export class Res {
+
+	export class Result {
+		readonly group: number
+		readonly header: string
+		readonly id: string
 		constructor(res: {grp: number, header: string, id: string});
+		/** @deprecated use `group` */
 		getGrp(): number;
+		/** @deprecated use `header` */
 		getHeader(): string;
+		/** @deprecated use `id` */
 		getId(): string;
 	}
 	export class FetchWordResponse {
-		constructor(response: IncomingMessage & {body: {definitions: {type?: string, definition?: string}[]}})
+		readonly definitions: Definition[]
+		constructor(response: {header: IncomingMessage, body: {definitions: {type: string, content: string}[]}})
 		areDefinitions(): boolean;
+		/** @deprecated use `definitions`*/
 		getDefinitions(): Definition[];
 	}
 	export class Definition {
-		constructor(definition: {type?: string, definition?: string});
+		readonly type: string
+		readonly content: string
+		constructor(definition: {type: string, content: string});
+		/** @deprecated  use `if( type )`*/
 		isType(): boolean;
+		/** @deprecated use `if( content )` */
 		isDefinition(): boolean;
+		/** @deprecated use `type` */
 		getType(): string;
+		/** @deprecated use `content` */
 		getDefinition(): string;
 	}
 }

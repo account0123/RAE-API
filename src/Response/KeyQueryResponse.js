@@ -1,31 +1,18 @@
 const Response = require('../Response');
-const {IncomingMessage} = require('http');
 
-/**
- * KeyQueryResponse.
- */
 class KeyQueryResponse extends Response{
-	#keys;
-	/**
-	 * 
-	 * @param {IncomingMessage} response
-	 */
+	/** @type {string[]} */
+	#keys = [];
+
 	constructor(response){
-		super(response);
+		super(response.header);
 		if(response.body) this.#keys = response.body;
 	}
 
-	/**
-	 * 
-	 * @returns {boolean} Si o no hay palabras relacionadas con la búsqueda
-	 */
-	areKeys(){ return this.#keys ? true : false; }
+	areKeys(){ return this.#keys.length > 0 }
+	getKeys() { return this.#keys }
 
-	/**
-	 * 
-	 * @returns {string[]} Un array de palabras
-	 */
-	getKeys() { return this.#keys; }
+	get keys(){return this.#keys}
 }
 
 module.exports = KeyQueryResponse;

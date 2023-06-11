@@ -2,24 +2,16 @@ const Response = require('../Response');
 const Definition = require('./Model/Definition');
 const {IncomingMessage} = require('http');
 
-/**
- * WordOfTheDayResponse.
- *
- * @method string getHeader()
- * @method string getId()
- * @method bool isHeader()
- * @method bool isId()
- */
 class RandomWordResponse extends Response{
+	/** @type {Definition[]} */
 	#definitions = [];
+	/** @type {string} */
 	#header;
+	/** @type {string} */
 	#id;
-	/**
-	 *
-	 * @param {IncomingMessage} response
-	 */
+	
 	constructor(response){
-		super(response);
+		super(response.header);
 		const body = response.body;
 		if (body.header) this.#header = body.header;
 		if (body.id) this.#id = body.id;
@@ -29,36 +21,16 @@ class RandomWordResponse extends Response{
 			}
 		}
 	}
+	isHeader(){ return !!this.#header }
+	isId(){ return !!this.#id }
+	areDefinitions(){ return this.#definitions.length > 0 }
+	getHeader(){ return this.#header }
+	getId(){ return this.#id }
+	getDefinitions(){ return this.#definitions }
 
-	/**
-	 * @returns {boolean} Sí o no hay la palabra tiene encabezado.
-	 */
-	isHeader(){ return this.#header ? true : false;}
-
-	/**
-	 * @returns {boolean} Sí o no la palabra tiene id.
-	 */
-	isId(){ return this.#id ? true : false; }
-
-	/**
-	 * @returns {boolean} Sí o no la palabra tiene definiciones disponibles.
-	 */
-	areDefinitions(){ return this.#definitions ? true : false; }
-
-	/**
-	 * @returns {string} El encabezado de la palabra.
-	 */
-	getHeader(){ return this.#header; }
-
-	/**
-	 * @returns {string} La id de la palabra.
-	 */
-	getId(){ return this.#id; }
-
-	/**
-	 * @returns {object[]} Las definiciones de la palabra en formato JSON.
-	 */
-	getDefinitions(){ return this.#definitions; }
+	get id(){return this.#id}
+	get header(){return this.#header}
+	get definitions(){return this.#definitions}
 }
 
 module.exports = RandomWordResponse;

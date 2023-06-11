@@ -2,23 +2,31 @@ const { BASE_URL, AUTH } = require('./Constants');
 const https = require('https');
 const {IncomingMessage} = require('http');
 const Utils = require("./Utils");
-const RAE = require('./RAE');
 
 const httpsAgent = new https.Agent({ ALPNProtocols: ['http/1.1'], minVersion: 'TLSv1.3', maxVersion: 'TLSv1.3' });
 
 class HttpInterface {
-	debug;
-	truncatedDebug;
-	setDebug(bool){
-		this.debug = bool;
-	}
-	setTruncatedDebug(bool){
-		this.truncatedDebug = bool;
+	debug = false
+	truncatedDebug = false
+	setDebugMode(mode){
+		switch(mode){
+			case 0:
+				this.truncatedDebug = false
+				this.debug = false
+				break
+			case 1:
+				this.truncatedDebug = true
+				this.debug = false
+				break
+			case 2:
+				this.truncatedDebug = false
+				this.debug = true
+		}
 	}
 	/**
 	 * Sends a GET request to URL/endpoint
 	 * @param {string} endpoint
-	 * @returns {Promise<IncomingMessage>} Http Response
+	 * @returns {Promise<{header:IncomingMessage, body: any}>} Http Response
 	 */
 	sendRequest(endpoint){
 		const url = BASE_URL + endpoint;
@@ -87,8 +95,7 @@ class HttpInterface {
 					console.log('body: ' + body);
 					console.log('Status Code: ' + res.statusCode);
 				}
-				const response = res;
-				Object.defineProperty(response, 'body', { value: JSON.parse(body), writable: false});
+				const response = {header: res, body: JSON.parse(body)};
 				resolve(response);
 			});
 
