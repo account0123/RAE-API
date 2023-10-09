@@ -1,8 +1,8 @@
 # RAE-API
 
-RAE API i modified from <https://github.com/mgp25/RAE-API> to nodejs
+RAE API I modified from <https://github.com/mgp25/RAE-API> to nodejs
 
-See examples folder for more information.
+See the [examples](https://github.com/account0123/RAE-API/tree/main/examples) folder for more information.
 
 ## Installation
 
