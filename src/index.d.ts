@@ -8,6 +8,7 @@ declare module "rae-api" {
 		keyQuery(query: string): Promise<KeyQueryResponse>;
 		searchWord(word: string): Promise<SearchWordResponse>;
 		fetchWord(id: string): Promise<FetchWordResponse>;
+		getRandomWord(): Promise<RandomWordResponse>;
 	}
 	export class Response {
 		STATUS_OK: 'ok';
