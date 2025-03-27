@@ -4,20 +4,21 @@ const debug = false;
 const rae = new RAE(debug);
 
 async function definir(palabra){
-	const search = await rae.searchWord(palabra);
-	const first_result = search.results[0];
-
-	const wordId = first_result.id;
-	const result = await rae.fetchWord(wordId);
-	const definitions = result.definitions;
-
-	let i = 1;
-	console.log(`Definición de ${first_result.header}`);
-	for (const definition of definitions) {
-		console.log(`${i}. Tipo: ${definition.type}\n`);
-		console.log(`    Definición: ${definition.content}\n\n`);
-		i++;
+	try {
+		const result = await rae.fetchWord(palabra);
+		const article = result.articles[0];
+		console.debug(article);
+		const title = result.word;
+		const definitions = article.senses;
+		let i = 1;
+		console.log(`Definición de ${title}`);
+		for (const definition of definitions) {
+			console.log(`${definition.raw}\n\n`);
+			i++;
+		}
+	} catch (error) {
+		console.error(error);
 	}
 }
 
-definir('ajo');
+definir('palabra');

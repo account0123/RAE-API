@@ -5,6 +5,7 @@ const RandomWordResponse = require('./Response/RandomWordResponse');
 const SearchWordResponse = require("./Response/SearchWordResponse");
 const WordOfTheDayResponse = require('./Response/WordOfTheDayResponse');
 const AnagramResponse = require('./Response/AnagramResponse');
+const Client = require('./APIClient.js');
 const enc = encodeURIComponent;
 class RAE{
     /**
@@ -24,6 +25,8 @@ class RAE{
     constructor(debugMode = 0){
         this.http = new HttpInterface();
         this.http.setDebugMode(debugMode);
+
+        this.client = new Client(debugMode);
     }
 
     /**
@@ -61,16 +64,15 @@ class RAE{
     }
 
     /**
-     * Obtiene las definiciones de una palabra por su ID. Para obtener el ID,
-     * use searchWord().
+     * Obtiene las definiciones de una palabra mediante busqueda exacta.
+     * Si no se encuentra la palabra, devuelve un error 404.
      *
-     * @see searchWord().
-     * @param {string}  id
+     * @param {string} word
      *
      * @throws Error
      */
-    async fetchWord(id){
-        return new FetchWordResponse(await this.http.sendRequest('fetch?id=' + enc(id)))
+    async fetchWord(word){
+        return new FetchWordResponse(await this.client.sendRequest('/words/' + enc(word)))
     }
 
     async searchAnagram(word){

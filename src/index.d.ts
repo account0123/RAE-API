@@ -4,10 +4,24 @@ declare module "rae-api" {
 	export class RAE {
 		http: HttpInterface;
 		constructor(debug?: boolean, truncatedDebug?: boolean);
+		/**
+		 * @deprecated actual API does not provide this endpoint
+		 */
 		getWordOfTheDay(): Promise<WordOfTheDayResponse>;
+		/**
+		 * @deprecated actual API does not provide this endpoint
+		 */
 		keyQuery(query: string): Promise<KeyQueryResponse>;
+		/**
+		 * @deprecated actual API does not provide this endpoint
+		 */
 		searchWord(word: string): Promise<SearchWordResponse>;
+		
 		fetchWord(id: string): Promise<FetchWordResponse>;
+		
+		/**
+		 * @deprecated actual API does not provide this endpoint
+		 */
 		getRandomWord(): Promise<RandomWordResponse>;
 	}
 	export class Response {
@@ -88,13 +102,117 @@ declare module "rae-api" {
 		/** @deprecated use `id` */
 		getId(): string;
 	}
+
 	export class FetchWordResponse {
-		readonly definitions: Definition[]
-		constructor(response: {header: IncomingMessage, body: {definitions: {type: string, content: string}[]}})
-		areDefinitions(): boolean;
-		/** @deprecated use `definitions`*/
-		getDefinitions(): Definition[];
+		word: string;
+		articles: Article[];
+		constructor(data: {word: string, articles: ArticleData[]});
 	}
+
+	export interface ArticleData {
+		conjugations?: Conjugation[];
+		origin?: Origin;
+		senses: Sense[];
+	}
+
+	/**
+	 * Artículo que contiene información de una palabra
+	 */
+	export class Article {
+		/**
+		 * @requires `this.sense.category == "verb"`
+		 */
+		conjugations?: VerbConjugation;
+		origin?: Origin;
+		senses: Sense[];
+		constructor(response: ArticleData)
+	}
+
+	export interface IConjugation {
+		mode: "indicative" | "non_personal" | "subjunctive" | "imperative";
+	}
+
+	export interface ImperativeTense extends IConjugation {
+		mode: "imperative";
+		singular_second_person: string;
+		singular_formal_second_person: string;
+		plural_second_person: string;
+		plural_formal_second_person: string;
+	}
+
+	export interface IndicativeConjugation extends IConjugation {
+		mode: "indicative";
+		present: Tense;
+		present_perfect: Tense;
+		past_perfect: Tense;
+		preterite: Tense;
+		past_anterior: Tense;
+		future: Tense;
+		future_perfect: Tense;
+		conditional: Tense;
+		conditional_perfect: Tense;
+	}
+
+	export interface NonPersonalConjugation extends IConjugation {
+		mode: "non_personal";
+		infinitive: string;
+		participle: string;
+		gerund: string;
+		compound_infinitive: string;
+		compound_gerund: string;
+	}
+
+	export interface SubjunctiveConjugation extends IConjugation {
+		mode: "subjunctive";
+		present: Tense;
+		present_perfect: Tense;
+		imperfect: Tense;
+		past_perfect: Tense;
+		future: Tense;	
+		future_perfect: Tense;
+	}
+
+	export interface Tense {
+		singular_first_person: string;
+		singular_second_person: string;
+		singular_formal_second_person: string;
+		singular_third_person: string;
+		plural_first_person: string;
+		plural_second_person: string;
+		plural_formal_second_person: string;
+		plural_third_person: string;
+	}
+
+	export interface VerbConjugation {
+		non_personal: NonPersonalConjugation;
+		indicative: IndicativeConjugation;
+		subjunctive: SubjunctiveConjugation;
+		imperative: ImperativeTense;
+	}
+
+	/**
+	 * Raíz u origen de una palabra
+	 */
+	export interface Origin {
+		raw: string;
+		type: string;
+		voice: string;
+		text: string;
+	}
+
+	/**
+	 * Significado de una palabra
+	 */
+	export interface Sense {
+		raw: string;
+		meaning_number: number;
+		category: "adjective" | "noun" | "verb";
+		usage: string;
+		description: string;
+		synonyms: string[] | null;
+		antonyms: string[] | null;
+	}
+
 	export class Definition {
 		readonly type: string
 		readonly content: string

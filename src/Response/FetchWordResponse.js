@@ -1,23 +1,11 @@
-const Response = require('../Response');
-const Definition = require('./Model/Definition');
+const { Article } = require('./Model/Article.js');
 
-class FetchWordResponse extends Response{
+class FetchWordResponse {
 
-    /** @type {Definition[]} */
-    #definitions = [];
-    
     constructor(response){
-        super(response.header);
-        const body = response.body;
-        for(const def of body.definitions) {
-            this.#definitions.push(new Definition(def));
-        }
+        this.word = response.word;
+        this.articles = response.meanings.map(article => new Article(article));
     }
-
-    areDefinitions(){ return this.#definitions.length > 0 }
-    getDefinitions(){ return this.#definitions }
-    
-    get definitions(){ return this.#definitions }
 }
 
 module.exports = FetchWordResponse;
